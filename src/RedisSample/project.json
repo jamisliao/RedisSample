@@ -24,7 +24,8 @@
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
     "Newtonsoft.Json": "*",
     "StackExchange.Redis": "*",
-    "Autofac.Extensions.DependencyInjection": "*"
+    "Autofac.Extensions.DependencyInjection": "*",
+    "Microsoft.Extensions.FileProviders.Physical": "1.1.0"
   },
   "tools": {
     "BundlerMinifier.Core": "2.0.238",

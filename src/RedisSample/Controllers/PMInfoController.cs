@@ -14,8 +14,15 @@ namespace RedisSample.Controllers
 
         public IActionResult Index()
         {
-            var result = this._pm2point5Service.GetPointHistory();
             return View();
+        }
+
+        [HttpGetAttribute]
+        public JsonResult GetHistory(int month)
+        {
+            var result = this._pm2point5Service.GeDataByNonth(month);
+
+            return Json(result);
         }
     }
 }

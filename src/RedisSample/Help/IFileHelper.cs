@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RedisSample.Help
 {
     public interface IFileHelper
     {
-        List<string> GetContent(string path);
+        Task<List<string>> GetContent(string path);
     }
 }

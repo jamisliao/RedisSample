@@ -1,5 +1,4 @@
 using Autofac;
-using RedisSample.Model.FormatConvert;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -10,11 +9,13 @@ using System;
 using RedisSample.Services;
 using RedisSample.Model.Repository;
 using RedisSample.Help;
+using Microsoft.Extensions.FileProviders;
 
 namespace RedisSample
 {
     public class Startup
     {
+        private IHostingEnvironment _hostingEnvironment;
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -23,6 +24,8 @@ namespace RedisSample
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            this._hostingEnvironment = env;
         }
 
         public IContainer ApplicationContainer { get; private set; }
@@ -42,10 +45,12 @@ namespace RedisSample
             // the collection, and build the container. If you want
             // to dispose of the container at the end of the app,
             // be sure to keep a reference to it as a property or field.
-            builder.RegisterType<PointInfoConvert>().As<IConvert>();
-            builder.RegisterType<CsvFileHelper>().As<IFileHelper>();
-            builder.RegisterType<PM2Point5Repository>().As<IPM2Point5Repository>();
-            builder.RegisterType<PM2Point5Service>().As<IPM2Point5Service>();
+            
+            var physicalProvider = _hostingEnvironment.ContentRootFileProvider;
+            builder.RegisterInstance(physicalProvider).As<IFileProvider>().SingleInstance();
+            builder.RegisterType<CsvFileHelper>().As<IFileHelper>().InstancePerDependency();
+            builder.RegisterType<PM2Point5Repository>().As<IPM2Point5Repository>().InstancePerDependency();
+            builder.RegisterType<PM2Point5Service>().As<IPM2Point5Service>().InstancePerDependency();
             builder.Populate(services);
             this.ApplicationContainer = builder.Build();
 
@@ -75,7 +80,7 @@ namespace RedisSample
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=PMInfo}/{action=Index}/{id?}");
             });
         }
 

@@ -7,12 +7,10 @@ namespace RedisSample.Model.Entity
     {
         public string SiteName { get; set; }
 
-        public string County { get; set; }
-
-        public Dictionary<int, int> PM2Point5Dict { get; set; }
+        public List<double> PM2Point5Values { get; set; }
 
         public DateTime Date { get; set; }
 
-        public string PublishTime { get; set; }
+        public string Item { get; set; }
     }
 }

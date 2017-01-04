@@ -13,9 +13,9 @@ namespace RedisSample.Services
             this._pm2point5Repo = pm2point5Repo;
         }
 
-        public List<PointPerDayEntity> GetPointHistory()
+        public List<PointPerDayEntity> GeDataByNonth(int month)
         {
-            var result = this._pm2point5Repo.GetPointHistory();
+            var result = this._pm2point5Repo.GetDataByMonth(month);
 
             return result;
         }

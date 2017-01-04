@@ -1,28 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
 <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" type="text/css" />
 <script src="https://cdn.jsdelivr.net/vue/2.1.3/vue.js"></script>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>JS Bin</title>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
+
 <body>
-<h2>Test2</h2>
+<h2>PM2.5</h2>
   <div id="app">  
     <table class="table table-condensed">
       <tr>
-        <th>name</th>
-        <th>age</th>
-        <th>gender </th>
+        <th>日期</th>
+        <th>測站</th>
+        <th>測項</th>
+        <th v-for="item in valueHeader">{{item}}</th>
       </tr>
-      <tr v-for="r in rows 
-        | recordLength 'filteredRowCount' 
-        | limitBy countOfPage pageStart ">
-        <td>{{ r.name }}</td>
-        <td>{{ r.age }}</td>
-        <td>{{ r.sex }}</td>
+      <tr v-for="r in rows">
+        <td>{{ r.date }}</td>
+        <td>{{ r.siteName }}</td>
+        <td>{{ r.item }}</td>
+        <td v-for="item in r.pM2Point5Values">{{item}}</td>
       </tr>
     </table> 
 
@@ -30,9 +28,11 @@
       <ul>
         <li v-bind:class="{'disabled': (currPage === 1)}" 
             @@click.prevent="setPage(currPage-1)"><a href="#">Prev</a></li>
+
         <li v-for="n in totalPage"
-            v-bind:class="{'active': (currPage === (n+1))}" 
-            @@click.prevent="setPage(n+1)"><a href="#">{{n+1}}</a></li>
+            v-bind:class="{'active': (currPage === (n))}" 
+            @@click.prevent="setPage(n)"><a href="#">{{n}}</a></li>
+
         <li v-bind:class="{'disabled': (currPage === totalPage)}" 
            @@click.prevent="setPage(currPage+1)"><a href="#">Next</a></li>
       </ul>
@@ -40,5 +40,5 @@
   </div>
   
 </body>
-<script src="~/js/Test2.js" charset="utf-8"></script>
+<script src="~/js/PM2Point5.js" charset="utf-8"></script>
 </html>
