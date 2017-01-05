@@ -14,8 +14,6 @@ namespace RedisSample.Model.Repository
         private readonly ConnectionMultiplexer _connection;
         private readonly IDatabase _db;
 
-        private readonly int _pageDefCount;
-
         public PM2Point5Repository(IFileHelper fileHelper)
         {
             this._fileHelper = fileHelper;
@@ -23,9 +21,9 @@ namespace RedisSample.Model.Repository
             this._db = this._connection.GetDatabase();
         }
 
-        public List<PointPerDayEntity> GetDataByMonth(int month)
+        public List<Station> GetDataByMonth(int month)
         {
-            var result = default(List<PointPerDayEntity>);
+            var result = default(List<Station>);
             if(RedisListExist(2015))
             {
                 result = ReadHistoryDataFromRedis(2015, month);
@@ -44,20 +42,20 @@ namespace RedisSample.Model.Repository
             return result;
         }
 
-        private List<PointPerDayEntity> ReadHistoryDataFromFile(string path)
+        private List<Station> ReadHistoryDataFromFile(string path)
         {
             var content = this._fileHelper.GetContent(path).Result;
 
-            var pointPerDayEnties = new List<PointPerDayEntity>();
+            var pointPerDayEnties = new List<Station>();
             foreach (var item in content)
             {
                 var pointInfo = item.Split(',');
-                var tmp = new PointPerDayEntity
+                var tmp = new Station
                 {
                     Date = DateTime.Parse(pointInfo[0]),
                     SiteName = pointInfo[1],
                     Item = pointInfo[2],
-                    PM2Point5Values = new List<double>()
+                    PM2Point5Measurements = new List<double>()
                 };
 
                 for (int i = 3; i < 27; i++)
@@ -65,11 +63,11 @@ namespace RedisSample.Model.Repository
                     var value = default(double);
                     if (double.TryParse(pointInfo[i], out value))
                     {
-                        tmp.PM2Point5Values.Add(value);
+                        tmp.PM2Point5Measurements.Add(value);
                     }
                     else
                     {
-                        tmp.PM2Point5Values.Add(-1);
+                        tmp.PM2Point5Measurements.Add(-1);
                     }
                 }
 
@@ -80,9 +78,9 @@ namespace RedisSample.Model.Repository
             return pointPerDayEnties;
         }
 
-        private List<PointPerDayEntity> ReadHistoryDataFromRedis(int year, int month)
+        private List<Station> ReadHistoryDataFromRedis(int year, int month)
         {
-            var result = new List<PointPerDayEntity>();
+            var result = new List<Station>();
 
             var key = $"{year}-{month}-pm2point5history";
             var listRange = this._db.StringGet(key).ToString();
@@ -94,14 +92,14 @@ namespace RedisSample.Model.Repository
             var value = this._db.ListRange(listKey, startIndex, endIndex-1);
             foreach (var item in value)
             {
-                var entity = JsonConvert.DeserializeObject<PointPerDayEntity>(item);
+                var entity = JsonConvert.DeserializeObject<Station>(item);
                 result.Add(entity);
             }
 
             return result;
         }
 
-        private void PutToRedis(List<PointPerDayEntity> entities, int year)
+        private void PutToRedis(List<Station> entities, int year)
         {
             if (RedisListExist(year))
             {
@@ -123,7 +121,7 @@ namespace RedisSample.Model.Repository
             return isExist;
         }
 
-        private void CreateMonthIndex(List<PointPerDayEntity> entities, int year)
+        private void CreateMonthIndex(List<Station> entities, int year)
         {
             var startDate = new DateTime(year, 1, 1);
             var startIndex = 0;

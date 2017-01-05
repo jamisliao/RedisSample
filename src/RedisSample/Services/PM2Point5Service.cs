@@ -13,7 +13,7 @@ namespace RedisSample.Services
             this._pm2point5Repo = pm2point5Repo;
         }
 
-        public List<PointPerDayEntity> GeDataByNonth(int month)
+        public List<Station> GeDataByNonth(int month)
         {
             var result = this._pm2point5Repo.GetDataByMonth(month);
 
