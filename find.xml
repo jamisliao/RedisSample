@@ -1,5 +1,8 @@
 <application>
   <component name="FindSettings">
+    <option name="customScope" value="File '…/Ftx.Trade.Job/Program.cs'" />
+    <option name="defaultScopeName" value="File '…/Ftx.Trade.Job/Program.cs'" />
+    <option name="SEARCH_SCOPE" value="File '…/Ftx.Trade.Job/Program.cs'" />
     <mask>*.css</mask>
     <mask>*.html</mask>
     <mask>*.xml</mask>
