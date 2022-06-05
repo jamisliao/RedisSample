@@ -3,4 +3,9 @@
     <option name="INSERT_BRACE_ON_ENTER" value="false" />
     <option name="REFORMAT_BLOCK_ON_RBRACE" value="false" />
   </component>
+  <component name="TodoConfiguration">
+    <pattern pattern="\bNotImplementedException\b" />
+    <pattern pattern="(?&lt;=\W|^)(?&lt;TAG&gt;BUG)(\W|$)(.*)" />
+    <pattern pattern="(?&lt;=\W|^)(?&lt;TAG&gt;TODO)(\W|$)(.*)" />
+  </component>
 </application>
